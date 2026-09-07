@@ -1443,6 +1443,39 @@ header,
         </div>
         <div class="slot-box" style="margin-top:18px;">
           <p style="font-size:13px;color:var(--text-soft);margin-bottom:14px;"><strong style="color:var(--ink);">Book a free 15-min call</strong> — pick a day and time.</p>
+          <div class="client-details" style="display:grid;gap:10px;margin-bottom:16px;">
+
+  <input
+    type="text"
+    id="clientName"
+    placeholder="Your Name"
+    autocomplete="name"
+    required
+  >
+
+  <input
+    type="tel"
+    id="clientPhone"
+    placeholder="Your WhatsApp Number"
+    autocomplete="tel"
+    required
+  >
+
+  <input
+    type="email"
+    id="clientEmail"
+    placeholder="Your Email"
+    autocomplete="email"
+    required
+  >
+
+  <textarea
+    id="clientMessage"
+    placeholder="What would you like to discuss? (Optional)"
+    rows="3"
+  ></textarea>
+
+</div>
           <div class="slot-days" id="slotDays">
             <div class="slot-day active" data-day="Mon">Mon</div>
             <div class="slot-day" data-day="Tue">Tue</div>
@@ -2242,6 +2275,7 @@ if (reminderSubmit) {
   
 
   /* ---- appointment slot picker ---- */
+
 var slotDays = document.querySelectorAll('.slot-day');
 var slotTimes = document.querySelectorAll('.slot-time:not(.taken)');
 var slotConfirm = document.getElementById('slotConfirm');
@@ -2249,23 +2283,31 @@ var slotConfirm = document.getElementById('slotConfirm');
 var chosenDay = 'Mon';
 var chosenTime = null;
 
+/* Select day */
 slotDays.forEach(function(d){
+
   d.addEventListener('click', function(){
+
     slotDays.forEach(function(x){
       x.classList.remove('active');
     });
 
     d.classList.add('active');
+
     chosenDay = d.dataset.day;
 
     if(chosenTime){
       slotConfirm.textContent =
         'Book ' + chosenDay + ', ' + chosenTime;
     }
+
   });
+
 });
 
+/* Select time */
 slotTimes.forEach(function(t){
+
   t.addEventListener('click', function(){
 
     document.querySelectorAll('.slot-time').forEach(function(x){
@@ -2274,15 +2316,19 @@ slotTimes.forEach(function(t){
 
     t.classList.add('active');
 
-    chosenTime = t.textContent;
+    chosenTime = t.textContent.trim();
 
     slotConfirm.disabled = false;
 
     slotConfirm.textContent =
       'Book ' + chosenDay + ', ' + chosenTime;
+
   });
+
 });
 
+
+/* Book appointment */
 if(slotConfirm){
 
   slotConfirm.addEventListener('click', function(){
@@ -2291,7 +2337,8 @@ if(slotConfirm){
       return;
     }
 
-    /* ---- Client information ---- */
+
+    /* Get client information */
     var clientName =
       document.getElementById('clientName').value.trim();
 
@@ -2304,64 +2351,102 @@ if(slotConfirm){
     var clientMessage =
       document.getElementById('clientMessage').value.trim();
 
-    /* ---- Validate required information ---- */
-    if(!clientName || !clientPhone || !clientEmail){
 
-      alert(
-        'Please enter your name, WhatsApp number and email.'
-      );
+    /* Validate */
+    if(!clientName){
 
+      alert('Please enter your name.');
+      document.getElementById('clientName').focus();
       return;
+
     }
 
-    /* ---- Advisor WhatsApp number ---- */
+    if(!clientPhone){
+
+      alert('Please enter your WhatsApp number.');
+      document.getElementById('clientPhone').focus();
+      return;
+
+    }
+
+    if(!clientEmail){
+
+      alert('Please enter your email.');
+      document.getElementById('clientEmail').focus();
+      return;
+
+    }
+
+
+    /* Advisor WhatsApp */
     var phone = '916369539734';
 
-    /* ---- WhatsApp message ---- */
+
+    /* WhatsApp message */
     var message =
-      '📞 New Call Booking Request' +
+      '🔔 New Call Booking\n\n' +
 
-      '\n\n👤 Client Name: ' + clientName +
+      '👤 Client Name: ' +
+      clientName +
 
-      '\n📱 Client WhatsApp: ' + clientPhone +
+      '\n📱 Phone: ' +
+      clientPhone +
 
-      '\n📧 Client Email: ' + clientEmail +
+      '\n📧 Email: ' +
+      clientEmail +
 
-      '\n📅 Preferred Day: ' + chosenDay +
+      '\n📅 Preferred Day: ' +
+      chosenDay +
 
-      '\n⏰ Preferred Time: ' + chosenTime +
+      '\n⏰ Preferred Time: ' +
+      chosenTime;
 
-      (clientMessage
-        ? '\n💬 Message: ' + clientMessage
-        : '') +
 
+    if(clientMessage){
+
+      message +=
+        '\n💬 Message: ' +
+        clientMessage;
+
+    }
+
+
+    message +=
       '\n\nPlease contact the client to confirm the appointment.';
 
-    /* ---- Create WhatsApp URL ---- */
+
+    /* WhatsApp URL */
     var whatsappUrl =
       'https://wa.me/' +
       phone +
       '?text=' +
       encodeURIComponent(message);
 
+
+    /* Open WhatsApp */
     slotConfirm.textContent =
       'Opening WhatsApp…';
 
     slotConfirm.disabled = true;
 
-    /* ---- Open WhatsApp ---- */
+
     window.open(
       whatsappUrl,
       '_blank',
       'noopener,noreferrer'
     );
 
+
+    /* Reset button */
     setTimeout(function(){
 
       slotConfirm.disabled = false;
 
       slotConfirm.textContent =
-        'Book ' + chosenDay + ', ' + chosenTime;
+        'Book ' +
+        chosenDay +
+        ', ' +
+        chosenTime;
 
     }, 1200);
 
