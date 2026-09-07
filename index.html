@@ -1462,12 +1462,11 @@ header,
   >
 
   <input
-    type="email"
-    id="clientEmail"
-    placeholder="Your Email"
-    autocomplete="email"
-    required
-  >
+  type="email"
+  id="clientEmail"
+  placeholder="Email Address (Optional)"
+  autocomplete="email"
+>
 
   <textarea
     id="clientMessage"
@@ -2354,20 +2353,16 @@ if(slotConfirm){
 
     /* Validate */
     if(!clientName){
-
-      alert('Please enter your name.');
-      document.getElementById('clientName').focus();
-      return;
-
-    }
+  alert('Please enter your name.');
+  document.getElementById('clientName').focus();
+  return;
+}
 
     if(!clientPhone){
-
-      alert('Please enter your WhatsApp number.');
-      document.getElementById('clientPhone').focus();
-      return;
-
-    }
+  alert('Please enter your WhatsApp number.');
+  document.getElementById('clientPhone').focus();
+  return;
+}
 
     if(!clientEmail){
 
