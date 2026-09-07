@@ -1040,7 +1040,7 @@ header,
     <div class="about-copy reveal">
       <span class="eyebrow"><span class="i18n" data-en="About your agent" data-ta="உங்கள் முகவரைப் பற்றி">About your agent</span></span>
       <h2 class="wipe-text"><span class="i18n" data-en="Twenty years of the same promise" data-ta="ஐந்து ஆண்டுகளாக ஒரே வாக்குறுதி">Twenty years of the same promise</span></h2>
-      <p class="lede-drop"><span class="i18n" data-en="I started as an LIC agent in 2021 after a few years in sales, because I kept seeing families struggle with claims nobody had explained properly. Since then I've worked with over 220 households across Chinnasalem and Kallakurichi — factory workers, first-time earners, retired couples — matching each one to a plan they actually understand." data-ta="2021ல் விற்பனைத் துறையில் சில ஆண்டுகள் பணியாற்றிய பிறகு LIC முகவராகத் தொடங்கினேன், ஏனெனில் யாரும் சரியாக விளக்காத உரிமைகோரல்களால் குடும்பங்கள் சிரமப்படுவதை நான் தொடர்ந்து பார்த்தேன். அன்றிலிருந்து சின்னசேலம் மற்றும் கள்ளக்குறிச்சி முழுவதும் 220க்கும் மேற்பட்ட குடும்பங்களுடன் பணியாற்றியுள்ளேன் — தொழிலாளர்கள், முதல் முறை வருமானம் ஈட்டுபவர்கள், ஓய்வு பெற்றவர்கள் — ஒவ்வொருவருக்கும் அவர்கள் உண்மையில் புரிந்துகொள்ளும் திட்டத்தைப் பொருத்துகிறேன்.">I started as an LIC agent in 2021 after a few years in sales, because I kept seeing families struggle with claims nobody had explained properly. Since then I've worked with over 220 households across Chinnasalem and Kallakurichi — factory workers, first-time earners, retired couples — matching each one to a plan they actually understand.</span></p>
+      <p class="lede-drop"><span class="i18n" data-en="I started as an LIC agent in 2006 after a few years in sales, because I kept seeing families struggle with claims nobody had explained properly. Since then I've worked with over 220 households across Chinnasalem and Kallakurichi — factory workers, first-time earners, retired couples — matching each one to a plan they actually understand." data-ta="2021ல் விற்பனைத் துறையில் சில ஆண்டுகள் பணியாற்றிய பிறகு LIC முகவராகத் தொடங்கினேன், ஏனெனில் யாரும் சரியாக விளக்காத உரிமைகோரல்களால் குடும்பங்கள் சிரமப்படுவதை நான் தொடர்ந்து பார்த்தேன். அன்றிலிருந்து சின்னசேலம் மற்றும் கள்ளக்குறிச்சி முழுவதும் 220க்கும் மேற்பட்ட குடும்பங்களுடன் பணியாற்றியுள்ளேன் — தொழிலாளர்கள், முதல் முறை வருமானம் ஈட்டுபவர்கள், ஓய்வு பெற்றவர்கள் — ஒவ்வொருவருக்கும் அவர்கள் உண்மையில் புரிந்துகொள்ளும் திட்டத்தைப் பொருத்துகிறேன்.">I started as an LIC agent in 2021 after a few years in sales, because I kept seeing families struggle with claims nobody had explained properly. Since then I've worked with over 220 households across Chinnasalem and Kallakurichi — factory workers, first-time earners, retired couples — matching each one to a plan they actually understand.</span></p>
       <p><span class="i18n" data-en="I'm not tied to a call centre script. When you call, you get me, the same person who sold you the policy and who'll sit with your family if a claim ever needs filing." data-ta="நான் ஒரு கால் சென்டர் ஸ்கிரிப்ட்டைப் பின்பற்றுபவன் இல்லை. நீங்கள் அழைக்கும்போது, உங்களுக்கு கிடைப்பது நான் தான் — உங்களுக்கு பாலிசி விற்ற அதே நபர், உரிமைகோரல் தேவைப்பட்டால் உங்கள் குடும்பத்துடன் அமர்பவனும் நான் தான்.">I'm not tied to a call centre script. When you call, you get me, the same person who sold you the policy and who'll sit with your family if a claim ever needs filing.</span></p>
       <ul class="about-facts">
         <li><span class="k i18n" data-en="Started" data-ta="தொடக்கம்">Started</span><span class="i18n" data-en="2021, LIC branch Kallakurichi" data-ta="2021, LIC கிளை கள்ளக்குறிச்சி">2021, LIC branch Kallakurichi</span></li>
@@ -2239,54 +2239,135 @@ if (reminderSubmit) {
     }, { threshold: 0.3 });
     mIO.observe(milestonesEl);
   }
+  
 
   /* ---- appointment slot picker ---- */
-  var slotDays = document.querySelectorAll('.slot-day');
-  var slotTimes = document.querySelectorAll('.slot-time:not(.taken)');
-  var slotConfirm = document.getElementById('slotConfirm');
-  var chosenDay = 'Mon', chosenTime = null;
-  slotDays.forEach(function(d){
-    d.addEventListener('click', function(){
-      slotDays.forEach(function(x){ x.classList.remove('active'); });
-      d.classList.add('active');
-      chosenDay = d.dataset.day;
-      if(chosenTime){ slotConfirm.textContent = 'Book ' + chosenDay + ', ' + chosenTime; }
+var slotDays = document.querySelectorAll('.slot-day');
+var slotTimes = document.querySelectorAll('.slot-time:not(.taken)');
+var slotConfirm = document.getElementById('slotConfirm');
+
+var chosenDay = 'Mon';
+var chosenTime = null;
+
+slotDays.forEach(function(d){
+  d.addEventListener('click', function(){
+    slotDays.forEach(function(x){
+      x.classList.remove('active');
     });
+
+    d.classList.add('active');
+    chosenDay = d.dataset.day;
+
+    if(chosenTime){
+      slotConfirm.textContent =
+        'Book ' + chosenDay + ', ' + chosenTime;
+    }
   });
-  slotTimes.forEach(function(t){
-    t.addEventListener('click', function(){
-      document.querySelectorAll('.slot-time').forEach(function(x){ x.classList.remove('active'); });
-      t.classList.add('active');
-      chosenTime = t.textContent;
+});
+
+slotTimes.forEach(function(t){
+  t.addEventListener('click', function(){
+
+    document.querySelectorAll('.slot-time').forEach(function(x){
+      x.classList.remove('active');
+    });
+
+    t.classList.add('active');
+
+    chosenTime = t.textContent;
+
+    slotConfirm.disabled = false;
+
+    slotConfirm.textContent =
+      'Book ' + chosenDay + ', ' + chosenTime;
+  });
+});
+
+if(slotConfirm){
+
+  slotConfirm.addEventListener('click', function(){
+
+    if(slotConfirm.disabled || !chosenTime){
+      return;
+    }
+
+    /* ---- Client information ---- */
+    var clientName =
+      document.getElementById('clientName').value.trim();
+
+    var clientPhone =
+      document.getElementById('clientPhone').value.trim();
+
+    var clientEmail =
+      document.getElementById('clientEmail').value.trim();
+
+    var clientMessage =
+      document.getElementById('clientMessage').value.trim();
+
+    /* ---- Validate required information ---- */
+    if(!clientName || !clientPhone || !clientEmail){
+
+      alert(
+        'Please enter your name, WhatsApp number and email.'
+      );
+
+      return;
+    }
+
+    /* ---- Advisor WhatsApp number ---- */
+    var phone = '916369539734';
+
+    /* ---- WhatsApp message ---- */
+    var message =
+      '📞 New Call Booking Request' +
+
+      '\n\n👤 Client Name: ' + clientName +
+
+      '\n📱 Client WhatsApp: ' + clientPhone +
+
+      '\n📧 Client Email: ' + clientEmail +
+
+      '\n📅 Preferred Day: ' + chosenDay +
+
+      '\n⏰ Preferred Time: ' + chosenTime +
+
+      (clientMessage
+        ? '\n💬 Message: ' + clientMessage
+        : '') +
+
+      '\n\nPlease contact the client to confirm the appointment.';
+
+    /* ---- Create WhatsApp URL ---- */
+    var whatsappUrl =
+      'https://wa.me/' +
+      phone +
+      '?text=' +
+      encodeURIComponent(message);
+
+    slotConfirm.textContent =
+      'Opening WhatsApp…';
+
+    slotConfirm.disabled = true;
+
+    /* ---- Open WhatsApp ---- */
+    window.open(
+      whatsappUrl,
+      '_blank',
+      'noopener,noreferrer'
+    );
+
+    setTimeout(function(){
+
       slotConfirm.disabled = false;
-      slotConfirm.textContent = 'Book ' + chosenDay + ', ' + chosenTime;
-    });
+
+      slotConfirm.textContent =
+        'Book ' + chosenDay + ', ' + chosenTime;
+
+    }, 1200);
+
   });
-  if(slotConfirm){
-    slotConfirm.addEventListener('click', function(){
-      if(slotConfirm.disabled || !chosenTime) return;
 
-      var phone = '916369539734';
-      var message =
-        'Hi Aswin, I would like to book a free 15-minute call.' +
-        '\n\nPreferred day: ' + chosenDay +
-        '\nPreferred time: ' + chosenTime +
-        '\n\nPlease confirm the appointment. Thank you.';
-
-      var whatsappUrl = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(message);
-
-      slotConfirm.textContent = 'Opening WhatsApp…';
-      slotConfirm.disabled = true;
-
-      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-
-      setTimeout(function(){
-        slotConfirm.disabled = false;
-        slotConfirm.textContent = 'Book ' + chosenDay + ', ' + chosenTime;
-      }, 1200);
-    });
-  }
-
+}
   /* ---- copy phone number ---- */
   var copyBtn = document.getElementById('copyPhoneBtn');
   var copyToast = document.getElementById('copyToast');
